@@ -18,6 +18,31 @@ type MockStore struct {
 	recorder *MockStoreMockRecorder
 }
 
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockStore) EXPECT() *MockStoreMockRecorder {
+	return m.recorder
+}
+
+// CreateUser implements db.Store.
+func (m *MockStore) CreateUser(arg0 context.Context, arg1 db.CreateUserParams) (db.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateUser", arg0, arg1)
+	ret0, _ := ret[0].(db.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateUser indicates an expected call of CreateUser
+func (mr *MockStoreMockRecorder) CreateUser(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockStore)(nil).CreateUser), arg0, arg1)
+}
+
+// GetUser implements db.Store.
+func (*MockStore) GetUser(ctx context.Context, username string) (db.User, error) {
+	panic("unimplemented")
+}
+
 // MockStoreMockRecorder is the mock recorder for MockStore.
 type MockStoreMockRecorder struct {
 	mock *MockStore
@@ -30,10 +55,6 @@ func NewMockStore(ctrl *gomock.Controller) *MockStore {
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockStore) EXPECT() *MockStoreMockRecorder {
-	return m.recorder
-}
 
 // AddAccountBalance mocks base method.
 func (m *MockStore) AddAccountBalance(arg0 context.Context, arg1 db.AddAccountBalanceParams) (db.Account, error) {
