@@ -1,20 +1,22 @@
-# use official Golang image
-FROM golang:1.21.6-bookworm
-
-# set working directory
+# Build stage
+FROM golang:1.21-alpine3.18 AS builder
 WORKDIR /app
-
-# Copy the source code
 COPY . . 
+RUN go build -o main main.go
+RUN apk add curl
+RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.12.2/migrate.linux-amd64.tar.gz | tar xvz
 
-# Download and install the dependencies
-RUN go get -d -v ./...
+FROM alpine:3.18
+WORKDIR /app
+COPY --from=builder /app/main .
+COPY --from=builder /app/migrate.linux-amd64 ./migrate
+COPY app.env .
+COPY start.sh .
+COPY wait-for.sh .
+COPY db/migration ./migration
 
-# Build the Go app
-RUN go build -o api .
+RUN chmod +x start.sh
 
-#EXPOSE the port
 EXPOSE 8000
-
-# Run the executable
-CMD ["./api"]
+CMD ["/app/main"]
+ENTRYPOINT [ "/app/start.sh" ]
