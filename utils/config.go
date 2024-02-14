@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"fmt"
+	"os"
 	"time"
 
 	"github.com/spf13/viper"
@@ -27,4 +29,20 @@ func LoadConfig(path string) (config Config, err error) {
 	}
 	err = viper.Unmarshal(&config)
 	return
+}
+
+func LoadConfigENV() (config Config, err error) {
+	time, err := time.ParseDuration(os.Getenv("ACCESS_TOKEN_DURATION"))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	env := Config{
+		DBDriver:            os.Getenv("DB_DRIVER"),
+		DBSource:            os.Getenv("DB_SOURCE"),
+		ServerAddress:       os.Getenv("SERVER_ADDRESS"),
+		TokenSymmetricKey:   os.Getenv("TOKEN_SYMMETRIC_KEY"),
+		AccessTokenDuration: time,
+	}
+	return env, err
 }

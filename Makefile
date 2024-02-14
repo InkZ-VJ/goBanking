@@ -1,5 +1,10 @@
 postgres: 
-	docker-compose up go_db
+	docker compose up go_db
+go_app:
+	docker compose build && docker compose up go_app
+
+build-app:
+	docker compose --env-file ./app.env up -d
 
 createdb:
 	docker exec -it go_db createdb --username=postgres --owner=postgres simple_bank
@@ -29,4 +34,4 @@ server:
 mock: 
 	mockgen --package mockdb --destination db/mock/store.go github.com/VatJittiprasert/goBanking/db/sqlc Store
 
-.PHONY:	postgres createdb dropdb migrateUp migrateDown migrateInit sqlc server mock migrateUp1 migrateDown1
+.PHONY:	postgres go_app build-app createdb dropdb migrateUp migrateDown migrateInit sqlc server mock migrateUp1 migrateDown1
