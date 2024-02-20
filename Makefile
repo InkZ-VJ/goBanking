@@ -1,3 +1,5 @@
+DB_URL=postgres://postgres:postgres@localhost:5000/simple_bank?sslmode=disable
+
 postgres: 
 	docker compose up go_db
 go_app:
@@ -14,13 +16,13 @@ dropdb:
 initMigration:
 	migrate create -ext sql -dir db/migration/ -seq ${INIT}
 migrateUp:
-	migrate -path db/migration -database "postgres://postgres:postgres@localhost:5000/simple_bank?sslmode=disable" --verbose up
+	migrate -path db/migration -database "$(DB_URL)"  --verbose up
 migrateDown:
-	migrate -path db/migration -database "postgres://postgres:postgres@localhost:5000/simple_bank?sslmode=disable" --verbose down
+	migrate -path db/migration -database "$(DB_URL)"  --verbose down
 migrateUp1:
-	migrate -path db/migration -database "postgres://postgres:postgres@localhost:5000/simple_bank?sslmode=disable" --verbose up 1
+	migrate -path db/migration -database "$(DB_URL)"  --verbose up 1
 migrateDown1:
-	migrate -path db/migration -database "postgres://postgres:postgres@localhost:5000/simple_bank?sslmode=disable" --verbose down 1
+	migrate -path db/migration -database "$(DB_URL)"  --verbose down 1
 
 sqlc:
 	sqlc generate

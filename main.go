@@ -11,9 +11,9 @@ import (
 )
 
 func main() {
-	config, err := utils.LoadConfigENV()
+	config, err := utils.LoadConfig("./")
 	if err != nil {
-		log.Fatal("cannot laod config:", err)
+		log.Fatal("cannot load config:", err)
 	}
 
 	conn, err := sql.Open(config.DBDriver, config.DBSource)
