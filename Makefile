@@ -47,6 +47,9 @@ proto:
 evans:
 	evans --host localhost --port 9000 -r repl
 
-.PHONY:	postgres go_app build-app createdb dropdb migrateUp migrateDown migrateInit sqlc server mock migrateUp1 migrateDown1 proto evans
+redis:
+	docker run --name redis -p 6379:6379 -d redis:7-alpine
+
+.PHONY:	postgres go_app build-app createdb dropdb migrateUp migrateDown migrateInit sqlc server mock migrateUp1 migrateDown1 proto evans redis
 
 
