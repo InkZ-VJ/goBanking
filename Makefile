@@ -13,8 +13,8 @@ createdb:
 dropdb:
 	docker exec -it go_db dropdb simple_bank
 
-initMigration:
-	migrate create -ext sql -dir db/migration/ -seq ${INIT}
+new_migration:
+	migrate create -ext sql -dir db/migration/ -seq ${name}
 migrateUp:
 	migrate -path db/migration -database "$(DB_URL)"  --verbose up
 migrateDown:
@@ -28,7 +28,7 @@ sqlc:
 	sqlc generate
 
 test:
-	go test -v -cover ./...
+	go test -v -cover -short ./...
 
 server:
 	go run main.go
@@ -50,6 +50,6 @@ evans:
 redis:
 	docker run --name redis -p 6379:6379 -d redis:7-alpine
 
-.PHONY:	postgres go_app build-app createdb dropdb migrateUp migrateDown migrateInit sqlc server mock migrateUp1 migrateDown1 proto evans redis
+.PHONY:	postgres go_app build-app createdb dropdb new_migration migrateUp migrateDown migrateInit sqlc server mock migrateUp1 migrateDown1 proto evans redis
 
 
