@@ -2,6 +2,7 @@ package gapi
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	db "github.com/VatJittiprasert/goBanking/db/sqlc"
@@ -17,10 +18,13 @@ import (
 )
 
 func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+	fmt.Println("validate request")
 	violations := validateCreateUserRequest(req)
 	if violations != nil {
 		return nil, invalidArgumentError(violations)
 	}
+
+	fmt.Println("get data from request")
 	hashedPassword, err := utils.HashPassword(req.GetPassword())
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to hash password: %s", err)
@@ -45,6 +49,7 @@ func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 		},
 	}
 
+	fmt.Println("create user tx")
 	txResult, err := server.store.CreateUserTx(ctx, arg)
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {

@@ -2,7 +2,6 @@ package gapi
 
 import (
 	"context"
-	"database/sql"
 
 	db "github.com/VatJittiprasert/goBanking/db/sqlc"
 	"github.com/VatJittiprasert/goBanking/pb"
@@ -21,7 +20,7 @@ func (server *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (
 	}
 	user, err := server.store.GetUser(ctx, req.GetUsername())
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if err == db.ErrReccordNotFound {
 			return nil, status.Errorf(codes.NotFound, "user not found")
 		}
 		return nil, status.Errorf(codes.Internal, "failed to find user")
