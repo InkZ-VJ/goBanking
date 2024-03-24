@@ -26,7 +26,10 @@ func (distributor *RedisTaskDistributor) DistributeTaskSendVerifyEmail(
 	if err != nil {
 		return fmt.Errorf("failed to marshal task payload: %w", err)
 	}
+
+    // create new task
 	task := asynq.NewTask(TaskSendVerifyEmail, jsonPayload, opts...)
+    // send task to redis
 	info, err := distributor.client.EnqueueContext(ctx, task)
 	if err != nil {
 		return fmt.Errorf("failed to enqueue task %w", err)

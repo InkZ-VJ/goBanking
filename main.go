@@ -57,6 +57,7 @@ func main() {
 
 	go runTaskProcessor(config, redisOpt, store)
 	go runGatewayServer(config, store, taskDistributor)
+	go runGinServer(config, store)
 	runGrpcServer(config, store, taskDistributor)
 }
 
@@ -75,6 +76,7 @@ func runDBMigration(migrationURL string, dbSource string) {
 func runTaskProcessor(config utils.Config, redisOpt asynq.RedisClientOpt, store db.Store) {
 	mailer := mail.NewGmailSender(config.EMAIL_SENDER_NAME, config.EMAIL_SENDER_ADDRESS, config.EMAIL_SENDER_PASSWORD)
 	taskProcessor := worker.NewRedisTaskProcessor(redisOpt, store, mailer)
+
 	log.Info().Msg("start task provessor")
 	err := taskProcessor.Start()
 	if err != nil {
@@ -157,7 +159,7 @@ func runGinServer(config utils.Config, store db.Store) {
 		log.Fatal().Err(err).Msg("cannot create server")
 	}
 
-	err = server.Start(config.HTTPServerAddress)
+	err = server.Start(config.GIN_SERVER_ADDRESS)
 	if err != nil {
 		log.Fatal().Err(err).Msg("cannot start server")
 	}
