@@ -20,7 +20,6 @@ import (
 	"github.com/hibiken/asynq"
 	_ "github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	_ "github.com/lib/pq"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
@@ -31,6 +30,7 @@ import (
 func main() {
 
 	config, err := utils.LoadConfig("./")
+	//config, err := utils.LoadConfigENV()
 	if err != nil {
 		log.Fatal().Err(err).Msg("cannot load config")
 	}

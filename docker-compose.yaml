@@ -12,6 +12,7 @@ services:
       TOKEN_SYMMETRIC_KEY: "12345678901234567890123456789012"
       ACCESS_TOKEN_DURATION: "15m"
       DB_DRIVER: "postgres"
+      REDIS_ADDRESS: "redis:6379"
     ports:
       - "8000:8000"
     depends_on:
@@ -30,6 +31,11 @@ services:
       - "5000:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
 
 volumes:  
   pgdata: {}

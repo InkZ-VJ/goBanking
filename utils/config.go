@@ -52,7 +52,9 @@ func LoadConfigENV() (config Config, err error) {
 		DBSource:            os.Getenv("DB_SOURCE"),
 		HTTPServerAddress:   os.Getenv("SERVER_ADDRESS"),
 		TokenSymmetricKey:   os.Getenv("TOKEN_SYMMETRIC_KEY"),
+		RedisAddress:        os.Getenv("REDIS_ADDRESS"),
 		AccessTokenDuration: time,
+		MigrationURL:        os.Getenv("MIGRATION_URL"),
 	}
 	return env, err
 }

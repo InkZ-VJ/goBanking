@@ -33,6 +33,8 @@ sqlc:
 	sqlc generate
 test:
 	go test -v -cover -short ./...
+fail_test:
+	go test -v -cover -short ./... | grep FAIL
 server:
 	go run main.go
 mock: 
