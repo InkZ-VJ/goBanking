@@ -49,6 +49,8 @@ proto:
 	proto/*.proto
 evans:
 	evans --host localhost --port 9000 -r repl
+rand_32key:
+	openssl rand -hex 64 | head -c 32
 
 
 
